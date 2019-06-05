@@ -1,5 +1,7 @@
 description: "A CLI tool to set/bump the `version` key in pubspec.yaml."
+
 name: "pubspec_version"
+#This is a test comment
 version: "0.3.2"
 dependencies:
   args: "^1.5.0"

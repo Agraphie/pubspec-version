@@ -9,6 +9,7 @@ class MockConsole extends Mock implements Console {}
 
 void main() {
   Directory temp;
+  File tempPubSpec;
   MockConsole mockConsole;
   Application app;
 
@@ -19,7 +20,8 @@ void main() {
 
   setUp(() async {
     temp = await Directory.systemTemp.createTemp();
-    File('test/pubspec_sample.yaml').copy('${temp.path}/pubspec.yaml');
+    tempPubSpec = await File('test/pubspec_sample.yaml')
+        .copy('${temp.path}/pubspec.yaml');
     mockConsole = MockConsole();
     app = Application(mockConsole);
   });
@@ -69,5 +71,25 @@ void main() {
     final code = await app.run(['get', '-d', temp.path]);
     expect(code, 0);
     await expectVersion('0.3.2');
+  });
+
+  test('bump breaking and retain comments', () async {
+    final code = await app.run(['bump', 'breaking', '-d', temp.path]);
+    expect(code, 0);
+    await expectVersion('0.4.0');
+
+    expect(
+        File("${temp.path}/pubspec.yaml")
+            .readAsStringSync()
+            .contains("#This is a test comment"),
+        true);
+  });
+
+  test('bump breaking and retain linebreaks', () async {
+    final code = await app.run(['bump', 'breaking', '-d', temp.path]);
+    expect(code, 0);
+    await expectVersion('0.4.0');
+    String pubSpecString = File("${temp.path}/pubspec.yaml").readAsStringSync();
+    expect(pubSpecString.contains("\r\n\r\n"), true);
   });
 }
