@@ -9,7 +9,6 @@ class MockConsole extends Mock implements Console {}
 
 void main() {
   Directory temp;
-  File tempPubSpec;
   MockConsole mockConsole;
   Application app;
 
@@ -20,8 +19,7 @@ void main() {
 
   setUp(() async {
     temp = await Directory.systemTemp.createTemp();
-    tempPubSpec = await File('test/pubspec_sample.yaml')
-        .copy('${temp.path}/pubspec.yaml');
+    await File('test/pubspec_sample.yaml').copy('${temp.path}/pubspec.yaml');
     mockConsole = MockConsole();
     app = Application(mockConsole);
   });

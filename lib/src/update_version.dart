@@ -27,14 +27,16 @@ abstract class UpdateVersion extends Command {
     Version newVersion = nextVersion(oldVersion);
     console.log(newVersion.toString());
 
-    return _writeNewPubSpec(pubSpec, oldVersion, newVersion);
+    _writeNewPubSpec(pubSpec, oldVersion, newVersion);
   }
 
   Future _writeNewPubSpec(
-      File pubSpec, Version oldVersion, Version newVersion) {
+      File pubSpec, Version oldVersion, Version newVersion) async {
     String newPubSpec = pubSpec.readAsStringSync().replaceFirst(
         'version: "${oldVersion}"', "version: " + '"${newVersion.toString()}"');
-    final ioSink = pubSpec.openWrite();
+
+    final ioSink =
+        await File(p.join(pubSpec.parent.path, 'pubspec.yaml')).openWrite();
 
     try {
       ioSink.write(newPubSpec);
