@@ -87,7 +87,7 @@ void main() {
     final code = await app.run(['bump', 'breaking', '-d', temp.path]);
     expect(code, 0);
     await expectVersion('0.4.0');
-    String pubSpecString = File("${temp.path}/pubspec.yaml").readAsStringSync();
-    expect(pubSpecString.contains("\r\n\r\n"), true);
+    List<String> pubSpec = File("${temp.path}/pubspec.yaml").readAsLinesSync();
+    expect(pubSpec[1], "");
   });
 }
