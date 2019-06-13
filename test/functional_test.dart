@@ -88,6 +88,6 @@ void main() {
     expect(code, 0);
     await expectVersion('0.4.0');
     List<String> pubSpec = File("${temp.path}/pubspec.yaml").readAsLinesSync();
-    expect(pubSpec[1], "");
+    expect(pubSpec[3], "");
   });
 }
