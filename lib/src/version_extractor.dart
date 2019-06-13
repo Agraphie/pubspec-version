@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:pub_semver/pub_semver.dart';
 
 abstract class VersionExtractor {
-  static const String VERSION_REGEX = "version:.+?[^#](?=[^('|\")]*(?:(\"|')[^('|\")]*('|\")[^('|\")]*)*\$)";
+  static const String VERSION_REGEX =
+      "version:.+?[^#](?=[^('|\")]*(?:(\"|')[^('|\")]*('|\")[^('|\")]*)*\$)";
 
   static Version extractVersion(File pubSpec) {
     RegExp versionMatch = RegExp(VERSION_REGEX);
