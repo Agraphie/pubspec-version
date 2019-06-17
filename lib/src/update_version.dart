@@ -5,6 +5,7 @@ import 'package:args/command_runner.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec/pubspec.dart';
 import 'package:pubspec_version/src/console.dart';
+import 'package:pubspec_version/src/pubspec_locator.dart';
 
 abstract class UpdateVersion extends Command {
   final Console console;
@@ -13,9 +14,11 @@ abstract class UpdateVersion extends Command {
 
   Future run() async {
     final dir = Directory(globalResults['pubspec-dir']);
-    final pubSpec = await PubSpec.load(dir);
+    final File pubSpecFile = await PubSpecLocator.findPubSpec(dir);
+
+    final pubSpec = await PubSpec.load(pubSpecFile.parent);
     final version = nextVersion(pubSpec.version);
-    await pubSpec.copy(version: version).save(dir);
+    await pubSpec.copy(version: version).save(pubSpecFile.parent);
     console.log(version.toString());
   }
 

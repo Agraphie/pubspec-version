@@ -70,4 +70,21 @@ void main() {
     expect(code, 0);
     await expectVersion('0.3.2');
   });
+
+  test('bump version in parent folder', () async {
+    Directory searchDirectory =
+        await Directory(temp.path + "/child1/child2/child3")
+            .create(recursive: true);
+
+    final code =
+        await app.run(['bump', 'breaking', '-d', searchDirectory.path]);
+    expect(code, 0);
+    await expectVersion('0.4.0');
+  });
+
+  test('bump version and fail due to no pubspec', () async {
+    Directory searchDirectory = await Directory.systemTemp.createTemp();
+    expect(app.run(['bump', 'breaking', '-d', searchDirectory.path]),
+        throwsException);
+  });
 }
